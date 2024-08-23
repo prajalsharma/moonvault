@@ -16,8 +16,8 @@ interface JobProps {
 
 const Card = ({ job }: JobProps) => {
   return (
-    <Link className="bg-white rounded p-4 flex card transition-shadow justify-between items-center " href={job.jobDescription}>
-      <div className="flex gap-4">
+    <Link className="bg-white rounded p-4 flex card transition-shadow justify-between items-center" href={job.jobDescription}>
+      <div className="flex gap-4 items-center">
         <div>
           <Image src={job.logo} width={72} height={72} alt="" className="rounded-sm" />
         </div>

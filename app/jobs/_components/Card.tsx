@@ -19,7 +19,7 @@ const Card = ({ job }: JobProps) => {
     <Link className="bg-white rounded p-4 flex card transition-shadow justify-between items-center" href={job.jobDescription}>
       <div className="flex gap-4 items-center">
         <div className="image-container sm:flex-initial">
-          <Image src={job.logo} width={72} height={72} alt="" className="rounded-sm size-14 sm:size-[4.5rem]" />
+          <Image src={job.logo} width={72} height={72} alt="" className="rounded-sm size-12 sm:size-[4.5rem]" />
         </div>
         <div className="flex flex-col gap-0.5">
           <h2 className="font-semibold text-sm sm:text-[1.125rem]">{job.role}</h2>

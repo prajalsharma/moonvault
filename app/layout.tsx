@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, Roboto } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header";
 
-const inter = Inter({ subsets: ["latin"] });
+const plus_jakarata_sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "EigenJobs",
-  description: "EigenJobs Dashboard",
+  description: "Job Dashboard",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-[#f7fafc]`}>
+      <body className={`${plus_jakarata_sans.className}`}>
         <Header />
         {children}
       </body>

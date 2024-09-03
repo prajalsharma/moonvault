@@ -5,7 +5,7 @@ const Header = () => {
         <div className="bg-white p-2">
           <img src="https://cdn.prod.website-files.com/64053c5d931f167ecf5997be/6405771ffb64702144b3da4a_el-logo.png" alt="" className="size-5" />
         </div>
-        <p className="font-roboto">EigenJobs</p>
+        <p className="font-roboto">Eigen Layer</p>
       </nav>
     </header>
   );

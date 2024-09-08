@@ -6,14 +6,26 @@ import LocationFilter from "./_components/LocationFilter";
 import SecondaryNavbar from "@/components/SecondaryNavbar";
 import JobTypeSelector from "./_components/JobTypeSelector";
 import { jobs } from "@/data/jobs";
+import { getBlogPosts } from "@/lib/notion";
 
-const JobsPage = () => {
+interface Post {
+  role: string;
+  location: string;
+  jobDescription: string;
+  company: string;
+  type: string;
+  logo: string;
+}
+
+const JobsPage = async() => {
   const [textFilter, setTextFilter] = useState("");
   const [locationFilter, setLocationFilter] = useState("on-site-remote");
 
   const handleFilterChange = (filter: string) => {
     setTextFilter(filter);
   };
+
+  const posts: Post[] = await getBlogPosts();
 
   // const handleLocationFilterChange = (location: string) => {
   //   setLocationFilter(location);
@@ -52,7 +64,7 @@ const JobsPage = () => {
           Showing <span className="font-bold">{filteredJobs.length}</span> jobs
         </p>
         <div className="flex flex-col gap-3">
-          {filteredJobs.map((job) => (
+          {posts.map((job) => (
             <Card key={job.role} job={job} />
           ))}
         </div>

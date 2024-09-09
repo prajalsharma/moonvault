@@ -16,11 +16,22 @@ interface JobProps {
 }
 
 const Card = ({ job }: JobProps) => {
+  const jobDescriptionLink = job.jobDescription && job.jobDescription.startsWith('http') ? job.jobDescription : "#";
+
   return (
-    <Link className="bg-white rounded p-4 flex card transition-shadow items-center border" href={job.jobDescription}>
+    <Link
+      className="bg-white rounded p-4 flex card transition-shadow items-center border hover:shadow-md"
+      href={jobDescriptionLink}
+    >
       <div className="flex gap-4 items-center w-full">
         <div>
-          <Image src={job.logo} width={72} height={72} alt="" className="rounded-sm size-[4.5rem]" />
+          <Image
+            src={job.logo}
+            width={72}
+            height={72}
+            alt="Company logo"
+            className="rounded-sm"
+          />
         </div>
         <div className="flex flex-1 flex-col md:flex-row justify-between gap-1">
           <div className="flex flex-col gap-1 items-start">
@@ -30,7 +41,7 @@ const Card = ({ job }: JobProps) => {
           </div>
           <div>
             <p className="text-sm flex font-medium items-center gap-1">
-              <MapPin className="text-[#1a0c6d] size-4" />
+              <MapPin className="text-[#1a0c6d]" />
               {job.location}
             </p>
           </div>
@@ -42,4 +53,5 @@ const Card = ({ job }: JobProps) => {
     </Link>
   );
 };
+
 export default Card;

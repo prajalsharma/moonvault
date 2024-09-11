@@ -2,7 +2,7 @@ import { Client } from '@notionhq/client';
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-export async function getBlogPosts() {
+export async function getJobs() {
   try {
     const databaseId = process.env.NOTION_DATABASE_ID;
     if (!databaseId) {
@@ -16,7 +16,10 @@ export async function getBlogPosts() {
     return response.results.map((page: any) => ({
       id: page.id,
       role: page.properties['Role'].title[0]?.text.content || '',
+      type: page.properties['Job Type'].rich_text[0]?.text.content || 'N/A',
       location: page.properties['Location'].rich_text[0]?.text.content || 'N/A',
+      hybrid: page.properties['Hybrid'].rich_text[0]?.text.content || 'N/A',
+      jobFunction: page.properties['Job Function'].rich_text[0]?.text.content || 'N/A',
       jobDescription: page.properties['Job Description']?.rich_text?.map((richText: any) => {
         if (richText.type === 'text') {
           const { content, link } = richText.text;
@@ -25,7 +28,7 @@ export async function getBlogPosts() {
         return ''; 
       }).join('') || 'N/A',
       company: page.properties['Project'].rich_text[0]?.text.content || 'N/A',
-      type: page.properties['Job Type'].rich_text[0]?.text.content || 'N/A',
+      category: page.properties['Category'].rich_text[0]?.text.content || 'N/A',
       logo: page.properties['Image']?.rich_text?.map((richText: any) => {
         if (richText.type === 'text') {
           const { content, link } = richText.text;

@@ -1,4 +1,4 @@
-import { ChevronRightIcon, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,19 +18,24 @@ interface JobProps {
 const Card = ({ job }: JobProps) => {
   const jobDescriptionLink = job.jobDescription && job.jobDescription.startsWith('http') ? job.jobDescription : "#";
 
+  const handleTest = async () => {
+    const jobDescriptionLink = job.jobDescription && job.jobDescription.startsWith('http') ? job.jobDescription : "#";
+    console.log(jobDescriptionLink);
+
+  }
   return (
     <Link
       className="bg-white rounded p-4 flex card transition-shadow items-center border hover:shadow-md"
       href={jobDescriptionLink}
     >
       <div className="flex gap-4 items-center w-full">
-        <div>
+        <div className="w-[72px] h-[72px] relative">
           <Image
             src={job.logo}
             width={72}
             height={72}
             alt="Company logo"
-            className="rounded-sm"
+            style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
           />
         </div>
         <div className="flex flex-1 flex-col md:flex-row justify-between gap-1">
@@ -41,15 +46,12 @@ const Card = ({ job }: JobProps) => {
           </div>
           <div>
             <p className="text-sm flex font-medium items-center gap-1">
-              <MapPin className="text-[#1a0c6d]" />
+              <MapPin className="text-[#1a0c6d] size-4" />
               {job.location}
             </p>
           </div>
         </div>
       </div>
-      {/* <p className="text-sm text-[#1a0c6d] lg:flex items-center font-semibold gap-1 mr-10 hidden">
-        Read more <ChevronRightIcon className="text-[#1a0c6d]" width={14} height={14} />
-      </p> */}
     </Link>
   );
 };

@@ -20,7 +20,14 @@ export async function getBlogPosts() {
       return ''; 
     }).join('') || 'N/A',
     company: page.properties['Project'].rich_text[0]?.text.content || 'N/A',
-    type: page.properties['Type'].rich_text[0]?.text.content || 'N/A',
-    logo: page.properties['Logo'].rich_text[0]?.text.content || 'N/A',
+    type: page.properties['Job Type'].rich_text[0]?.text.content || 'N/A',
+    logo: page.properties['Image']?.rich_text?.map((richText: any) => {
+      if (richText.type === 'text') {
+        const { content, link } = richText.text;
+        return link ? link.url : content;
+      }
+      return ''; 
+    }).join(''),
+    // logo: page.properties['Image'].files?.file?.url || page.properties['Image'].files?.external?.url,
   }));
 }

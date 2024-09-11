@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { MultiSelect } from "@/components/MultiSelector";
-import Category from "./Category";
+// import Category from "./Category";
 
 const jobType = [
   { value: "fulltime", label: "Full Time" },

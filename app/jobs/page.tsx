@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextFilter from "./_components/TextFilter";
 import Card from "./_components/Card";
 import LocationFilter from "./_components/LocationFilter";
 import SecondaryNavbar from "@/components/SecondaryNavbar";
 import { MultiSelect } from "@/components/MultiSelector";
 import { Button } from "@/components/ui/button";
+import { getJobs } from "@/lib/notion";
 
 
 
@@ -15,6 +16,21 @@ const jobType = [
   { value: "hybrid", label: "Hybrid" },
   { value: "remote", label: "Remote" },
 ];
+
+const jobFunction = [
+  { value: "software_engineering", label: "software_engineering" },
+  { value: "marketing_communication", label: "marketing_communication" },
+  { value: "sales_business_dev", label: "sales_business_dev" },
+  { value: "data_science", label: "data_science" },
+  { value: "research_development", label: "research_development" },
+  { value: "product_management", label: "product_management" },
+  { value: "design_ux", label: "design_ux" },
+  { value: "content", label: "content" },
+  { value: "other_engineering", label: "Other Engineering" },
+  { value: "devops_infrastructure", label: "devops_infrastructure" },
+  { value: "accounting_finance", label: "accounting_finance" }
+]
+
 
 const data = [{
   id: '43858b9a-47a5-4cba-94fc-c6d2d88c5430',
@@ -287,19 +303,35 @@ interface Job {
 const JobsPage = () => {
   const [selectedJobType, setSelectedJobType] = useState<string[]>([]);
   const [filteredjobs, setFilteredJobs] = useState<Job[]>([]);
+  const [allJobs, setAllJobs] = useState<Job[]>([]);
 
   const handleFilterChange = () => {
 
   }
-  const allJobs: Job[] = data;
+
+  useEffect( () => {
+    const init = async() => {
+      const allJobs: Job[] = data;
+      setAllJobs(allJobs);
+      console.log(allJobs);
+    }
+    init();
+  }, []);
+  
 
 
-  const handleCategory = (type: string) => {
-    const filtered = allJobs.filter(job => job.category === type);
+  const handleCategory = (cate: string, jobFunction?: string, jobType?: string) => {
+    const filtered = allJobs.filter((job) => {
+      const matchesCategory = job.category === cate;
+      const matchesJobFunction = jobFunction ? job.jobFunction === jobFunction : true;
+      const matchesJobType = jobType ? job.type === jobType : true;
+      return matchesCategory && matchesJobFunction && matchesJobType;
+    });
+  
     console.log(filtered);
     setFilteredJobs(filtered);
   };
-
+  
   return (
     <main className="pt-20 pb-10 mx-auto">
       <div className="bg-[#f7fafc] px-7 pt-32 pb-2">
@@ -312,7 +344,7 @@ const JobsPage = () => {
             <div className="flex px-4 pb-3">
               <div>
                 <MultiSelect
-                  options={jobType}
+                  options={jobFunction}
                   onValueChange={setSelectedJobType}
                   defaultValue={selectedJobType}
                   className="w-[150px]"

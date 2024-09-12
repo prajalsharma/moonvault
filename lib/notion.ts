@@ -35,15 +35,7 @@ export async function getJobs() {
           return ''; 
         }).join('');
       };
-
-      const getLogoUrl = (property: any) => {
-        if (property?.files?.length > 0) {
-          const file = property.files[0];
-          return file?.file?.url || file?.external?.url || '';
-        }
-        return '';
-      };
-
+      
       return {
         id: page.id,
         role: getProperty(page.properties['Role'], 'title'),

@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { MapPin } from "lucide-react";
 
-const LocationFilter = ({onLocationFilterChange}) => {
+const LocationFilter = ({onLocationFilterChange}: {onLocationFilterChange: (location: string) => void}) => {
 
   const handleLocationChange = (e: any) => {
     const location = e.target.value;

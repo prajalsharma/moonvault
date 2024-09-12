@@ -2,32 +2,64 @@ import { Client } from '@notionhq/client';
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-export async function getBlogPosts() {
-  const databaseId = process.env.NOTION_DATABASE_ID || '';
-  const response = await notion.databases.query({
-    database_id: databaseId,
-  });
-  
-  return response.results.map((page: any) => ({
-    id: page.id,
-    role: page.properties['Role'].title[0]?.text.content || '',
-    location: page.properties['Location'].rich_text[0]?.text.content || 'N/A',
-    jobDescription: page.properties['Job Description']?.rich_text?.map((richText: any) => {
-      if (richText.type === 'text') {
-        const { content, link } = richText.text;
-        return link ? link.url : content;
-      }
-      return ''; 
-    }).join('') || 'N/A',
-    company: page.properties['Project'].rich_text[0]?.text.content || 'N/A',
-    type: page.properties['Job Type'].rich_text[0]?.text.content || 'N/A',
-    logo: page.properties['Image']?.rich_text?.map((richText: any) => {
-      if (richText.type === 'text') {
-        const { content, link } = richText.text;
-        return link ? link.url : content;
-      }
-      return ''; 
-    }).join(''),
-    // logo: page.properties['Image'].files?.file?.url || page.properties['Image'].files?.external?.url,
-  }));
+export async function getJobs() {
+  try {
+    const databaseId = process.env.NOTION_DATABASE_ID;
+    if (!databaseId) {
+      throw new Error('NOTION_DATABASE_ID is not defined');
+    }
+
+    const response = await notion.databases.query({
+      database_id: databaseId,
+    });
+
+    return response.results.map((page: any) => {
+      const getProperty = (property: any, type: string, defaultValue = 'N/A') => {
+        if (!property) return defaultValue;
+        switch (type) {
+          case 'title':
+            return property.title?.[0]?.text?.content || defaultValue;
+          case 'rich_text':
+            return property.rich_text?.[0]?.text?.content || defaultValue;
+          default:
+            return defaultValue;
+        }
+      };
+
+      // Handle complex properties like jobDescription and logo
+      const getRichTextContent = (richTextArray: any[]) => {
+        return richTextArray?.map((richText: any) => {
+          if (richText.type === 'text') {
+            const { content, link } = richText.text;
+            return link ? link.url : content;
+          }
+          return ''; 
+        }).join('') || 'N/A';
+      };
+
+      const getLogoUrl = (property: any) => {
+        if (property?.files?.length > 0) {
+          const file = property.files[0];
+          return file?.file?.url || file?.external?.url || '';
+        }
+        return '';
+      };
+
+      return {
+        id: page.id,
+        role: getProperty(page.properties['Role'], 'title'),
+        type: getProperty(page.properties['Job Type'], 'rich_text'),
+        location: getProperty(page.properties['Location'], 'rich_text'),
+        hybrid: getProperty(page.properties['Hybrid'], 'rich_text'),
+        jobFunction: getProperty(page.properties['Job Function'], 'rich_text'),
+        jobDescription: getRichTextContent(page.properties['Job Description']?.rich_text),
+        company: getProperty(page.properties['Project'], 'rich_text'),
+        category: getProperty(page.properties['Category'], 'rich_text'),
+        logo: getLogoUrl(page.properties['Image']),
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching jobs from Notion:', error);
+    throw error;
+  }
 }

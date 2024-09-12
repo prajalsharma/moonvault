@@ -3,13 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Job {
+  id: string;
   role: string;
+  type: string;
   location: string;
+  hybrid: string;
+  jobFunction: string;
   jobDescription: string;
   company: string;
-  type: string;
+  category: string;
   logo: string;
 }
+
 
 interface JobProps {
   job: Job;
@@ -18,11 +23,7 @@ interface JobProps {
 const Card = ({ job }: JobProps) => {
   const jobDescriptionLink = job.jobDescription && job.jobDescription.startsWith('http') ? job.jobDescription : "#";
 
-  const handleTest = async () => {
-    const jobDescriptionLink = job.jobDescription && job.jobDescription.startsWith('http') ? job.jobDescription : "#";
-    console.log(jobDescriptionLink);
 
-  }
   return (
     <Link
       className="bg-white rounded p-4 flex card transition-shadow items-center border hover:shadow-md"

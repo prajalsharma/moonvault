@@ -6,9 +6,6 @@ import LocationFilter from "./_components/LocationFilter";
 import SecondaryNavbar from "@/components/SecondaryNavbar";
 import { MultiSelect } from "@/components/MultiSelector";
 import { Button } from "@/components/ui/button";
-import { getJobs } from "@/lib/notion";
-
-
 
 const jobType = [
   { value: "hybrid", label: "On-Site" },
@@ -42,15 +39,15 @@ interface Job {
   logo: string;
 }
 
-
 const JobsPage = () => {
   const [selectedJobFunction, setSelectedJobFunction] = useState<string[]>([]);
   const [selectedJobType, setSelectedJobType] = useState<string[]>([]);
   const [filteredjobs, setFilteredJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
+  const [category, setCategory] = useState<string>("");
 
   const handleFilterChange = () => {
-    console.log()
+
   }
 
   useEffect(() => {
@@ -58,10 +55,10 @@ const JobsPage = () => {
       try {
         const response = await fetch('/api/jobs');
         if (response.ok) {
-          console.log("response");
-          const allJobs = await response.json();
-          setAllJobs(allJobs);
-          console.log(allJobs);
+          const jobs = await response.json();
+          setAllJobs(jobs);
+          setFilteredJobs(jobs);
+          handleFilters(jobs, selectedJobFunction, selectedJobType, category);
         } else {
           console.error('Failed to fetch jobs:', response.statusText);
         }
@@ -71,12 +68,17 @@ const JobsPage = () => {
     };
 
     fetchJobs();
+  }, [selectedJobFunction, selectedJobType, category]);
 
-    handleMultiSelect(selectedJobFunction, selectedJobType);
-  }, [selectedJobFunction, selectedJobType]);
+  const handleFilters = (jobs: Job[], selectedJobFunctions: string[], selectedJobTypes: string[], category: string) => {
+    if (selectedJobFunctions.length === 0 && selectedJobTypes.length === 0 && !category) {
+      setFilteredJobs(jobs);
+      return;
+    }
 
-  const handleMultiSelect = (selectedJobFunctions: string[], selectedJobTypes: string[]) => {
-    const filtered = allJobs.filter((job) => {
+    const filtered = jobs.filter((job) => {
+      const matchesCategory = category ? job.category === category : true;
+
       const matchesJobFunction = selectedJobFunctions.length > 0
         ? selectedJobFunctions.includes(job.jobFunction)
         : true;
@@ -92,33 +94,20 @@ const JobsPage = () => {
         })
         : true;
 
-      return matchesJobFunction && matchesJobType;
-    });
-
-    setFilteredJobs(filtered);
-  };
-
-
-
-  const handleCategory = (cate: string, jobFunction?: string, jobType?: string) => {
-
-    if (!cate && !jobFunction && !jobType) {
-      setFilteredJobs(allJobs);
-      return;
-    }
-
-    const filtered = allJobs.filter((job) => {
-      const matchesCategory = cate ? job.category === cate : true;
-      const matchesJobFunction = jobFunction ? job.jobFunction === jobFunction : true;
-      const matchesJobType = jobType ? job.type === jobType : true;
       return matchesCategory && matchesJobFunction && matchesJobType;
     });
 
-    console.log(filtered);
     setFilteredJobs(filtered);
   };
 
+  const handleCategory = (cate: string) => {
+    setCategory(cate);
+    handleFilters(allJobs, selectedJobFunction, selectedJobType, cate);
+  };
 
+  useEffect(() => {
+    handleFilters(allJobs, selectedJobFunction, selectedJobType, category);
+  }, [selectedJobFunction, selectedJobType, category]);
   return (
     <main className="pt-20 pb-10 mx-auto">
       <div className="bg-[#f7fafc] px-7 pt-32 pb-2">
@@ -137,7 +126,6 @@ const JobsPage = () => {
                   className="w-[150px]"
                   placeholder="Job Function"
                 />
-
               </div>
               <div className="ml-[30px]">
                 <MultiSelect
@@ -147,7 +135,6 @@ const JobsPage = () => {
                   className="w-[6.8rem]"
                   placeholder="Job Type"
                 />
-
               </div>
               <div className="ml-[207px]">
                 <div className="space-x-[13px]">
@@ -161,7 +148,6 @@ const JobsPage = () => {
                     EigenDA
                   </Button>
                 </div>
-
               </div>
             </div>
           </div>

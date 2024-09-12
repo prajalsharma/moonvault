@@ -1,4 +1,4 @@
-import { getJobs } from '../../lib/notion';
+import { getJobs } from '../../../lib/notion';
 import { NextResponse } from 'next/server';
 
 export async function GET() {

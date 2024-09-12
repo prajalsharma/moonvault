@@ -26,7 +26,6 @@ export async function getJobs() {
         }
       };
 
-      // Handle complex properties like jobDescription and logo
       const getRichTextContent = (richTextArray: any[]) => {
         return richTextArray?.map((richText: any) => {
           if (richText.type === 'text') {

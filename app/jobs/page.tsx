@@ -50,6 +50,10 @@ const JobsPage = () => {
 
   }
 
+  const handleLocationChange = (data: string) => {
+    console.log(data);
+  }
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -87,8 +91,8 @@ const JobsPage = () => {
         ? selectedJobTypes.some((type) => {
           if (type === "Remote") {
             return job.type === "Remote" && job.hybrid === "False";
-          } else if (type === "null") {
-            return job.type === "null" && job.hybrid === "True";
+          } else {
+            return job.hybrid === "True";
           }
           return true;
         })
@@ -115,7 +119,7 @@ const JobsPage = () => {
           <div className="bg-white border-[1.5px] rounded-sm flex flex-col gap-4">
             <div className="flex flex-col lg:gap-4 lg:flex-row  divide-y-[1.5px] md:divide-x-[1.5px] md:divide-y-0 border-b">
               <TextFilter onTextFilterChange={handleFilterChange} />
-              <LocationFilter />
+              <LocationFilter onLocationFilterChange={handleLocationChange}/>
             </div>
             <div className="flex px-4 pb-3">
               <div>

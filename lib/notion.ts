@@ -33,7 +33,7 @@ export async function getJobs() {
             return link ? link.url : content;
           }
           return ''; 
-        }).join('') || 'N/A';
+        }).join('');
       };
 
       const getLogoUrl = (property: any) => {
@@ -54,7 +54,7 @@ export async function getJobs() {
         jobDescription: getRichTextContent(page.properties['Job Description']?.rich_text),
         company: getProperty(page.properties['Project'], 'rich_text'),
         category: getProperty(page.properties['Category'], 'rich_text'),
-        logo: getLogoUrl(page.properties['Image']),
+        logo: getRichTextContent(page.properties['Image']?.rich_text),
       };
     });
   } catch (error) {

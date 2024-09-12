@@ -11,25 +11,23 @@ import { getJobs } from "@/lib/notion";
 
 
 const jobType = [
-  { value: "fulltime", label: "Full Time" },
-  { value: "contract", label: "Contract" },
-  { value: "hybrid", label: "Hybrid" },
-  { value: "remote", label: "Remote" },
+  { value: "hybrid", label: "On-Site" },
+  { value: "Remote", label: "Remote" },
 ];
 
 const jobFunction = [
-  { value: "software_engineering", label: "software_engineering" },
-  { value: "marketing_communication", label: "marketing_communication" },
-  { value: "sales_business_dev", label: "sales_business_dev" },
-  { value: "data_science", label: "data_science" },
-  { value: "research_development", label: "research_development" },
-  { value: "product_management", label: "product_management" },
-  { value: "design_ux", label: "design_ux" },
-  { value: "content", label: "content" },
+  { value: "software_engineering", label: "Software Engineering" },
+  { value: "marketing_communication", label: "Marketing Communication" },
+  { value: "sales_business_dev", label: "Sales Business Dev" },
+  { value: "data_science", label: "Data Science" },
+  { value: "research_development", label: "Research Development" },
+  { value: "product_management", label: "Product Management" },
+  { value: "design_ux", label: "Design UX" },
+  { value: "content", label: "Content" },
   { value: "other_engineering", label: "Other Engineering" },
-  { value: "devops_infrastructure", label: "devops_infrastructure" },
-  { value: "accounting_finance", label: "accounting_finance" }
-]
+  { value: "devops_infrastructure", label: "DevOps Infrastructure" },
+  { value: "accounting_finance", label: "Accounting Finance" }
+];
 
 
 const data = [{
@@ -301,37 +299,69 @@ interface Job {
 
 
 const JobsPage = () => {
+  const [selectedJobFunction, setSelectedJobFunction] = useState<string[]>([]);
   const [selectedJobType, setSelectedJobType] = useState<string[]>([]);
   const [filteredjobs, setFilteredJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
 
   const handleFilterChange = () => {
-
+    console.log()
   }
 
-  useEffect( () => {
-    const init = async() => {
+  useEffect(() => {
+    const init = async () => {
       const allJobs: Job[] = data;
       setAllJobs(allJobs);
       console.log(allJobs);
     }
     init();
-  }, []);
-  
+    handleMultiSelect(selectedJobFunction, selectedJobType);
+  }, [selectedJobFunction, selectedJobType]);
+
+  const handleMultiSelect = (selectedJobFunctions: string[], selectedJobTypes: string[]) => {
+    const filtered = allJobs.filter((job) => {
+      const matchesJobFunction = selectedJobFunctions.length > 0
+        ? selectedJobFunctions.includes(job.jobFunction)
+        : true;
+
+      const matchesJobType = selectedJobTypes.length > 0
+        ? selectedJobTypes.some((type) => {
+          if (type === "Remote") {
+            return job.type === "Remote" && job.hybrid === "False";
+          } else if (type === "null") {
+            return job.type === "null" && job.hybrid === "True";
+          }
+          return true;
+        })
+        : true;
+
+      return matchesJobFunction && matchesJobType;
+    });
+
+    setFilteredJobs(filtered);
+  };
+
 
 
   const handleCategory = (cate: string, jobFunction?: string, jobType?: string) => {
+
+    if (!cate && !jobFunction && !jobType) {
+      setFilteredJobs(allJobs);
+      return;
+    }
+
     const filtered = allJobs.filter((job) => {
-      const matchesCategory = job.category === cate;
+      const matchesCategory = cate ? job.category === cate : true;
       const matchesJobFunction = jobFunction ? job.jobFunction === jobFunction : true;
       const matchesJobType = jobType ? job.type === jobType : true;
       return matchesCategory && matchesJobFunction && matchesJobType;
     });
-  
+
     console.log(filtered);
     setFilteredJobs(filtered);
   };
-  
+
+
   return (
     <main className="pt-20 pb-10 mx-auto">
       <div className="bg-[#f7fafc] px-7 pt-32 pb-2">
@@ -345,20 +375,22 @@ const JobsPage = () => {
               <div>
                 <MultiSelect
                   options={jobFunction}
-                  onValueChange={setSelectedJobType}
-                  defaultValue={selectedJobType}
+                  onValueChange={(value) => setSelectedJobFunction(value)}
+                  defaultValue={selectedJobFunction}
                   className="w-[150px]"
                   placeholder="Job Function"
                 />
+
               </div>
               <div className="ml-[30px]">
                 <MultiSelect
                   options={jobType}
-                  onValueChange={setSelectedJobType}
+                  onValueChange={(value) => setSelectedJobType(value)}
                   defaultValue={selectedJobType}
                   className="w-[6.8rem]"
                   placeholder="Job Type"
                 />
+
               </div>
               <div className="ml-[207px]">
                 <div className="space-x-[13px]">

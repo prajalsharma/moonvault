@@ -26,7 +26,6 @@ export async function getJobs() {
         }
       };
 
-      // Handle complex properties like jobDescription and logo
       const getRichTextContent = (richTextArray: any[]) => {
         return richTextArray?.map((richText: any) => {
           if (richText.type === 'text') {
@@ -34,17 +33,9 @@ export async function getJobs() {
             return link ? link.url : content;
           }
           return ''; 
-        }).join('') || 'N/A';
+        }).join('');
       };
-
-      const getLogoUrl = (property: any) => {
-        if (property?.files?.length > 0) {
-          const file = property.files[0];
-          return file?.file?.url || file?.external?.url || '';
-        }
-        return '';
-      };
-
+      
       return {
         id: page.id,
         role: getProperty(page.properties['Role'], 'title'),
@@ -55,7 +46,7 @@ export async function getJobs() {
         jobDescription: getRichTextContent(page.properties['Job Description']?.rich_text),
         company: getProperty(page.properties['Project'], 'rich_text'),
         category: getProperty(page.properties['Category'], 'rich_text'),
-        logo: getLogoUrl(page.properties['Image']),
+        logo: getRichTextContent(page.properties['Image']?.rich_text),
       };
     });
   } catch (error) {

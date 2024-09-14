@@ -13,7 +13,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'gateway.lighthouse.storage',
+        hostname: 'eigenjobs.s3.amazonaws.com',
         pathname: '/**',
       },
     ],

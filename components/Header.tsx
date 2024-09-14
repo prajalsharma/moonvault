@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import SubstackEmbed from "./SubstackEmbed";
 
 const Links = [
   { label: "Blog", href: "https://www.blog.eigenlayer.xyz/" },
@@ -28,7 +29,7 @@ const Header = () => {
               className="size-5"
             />
           </div>
-          <span className="text-3xl">Eigen Jobs</span>
+          <span className="text-2xl lg:text-3xl">Eigen Jobs</span>
         </div>
         <div className="relative md:hidden">
           <button
@@ -71,23 +72,25 @@ const Header = () => {
             )}
           </div>
         </div>
-        <div className="relative hidden md:block">
+        <div className="relative hidden md:flex">
           <button
-            className={`"mr-5 text-[#1a0c6d] bg-white transition-colors py-2 px-4 rounded-full flex items-center text-sm hover:bg-[#eaf2ff]" ${
+            className={cn(
+              "mr-4 text-[#1a0c6d] bg-white transition-colors py-2 px-3 lg:px-7 rounded-lg flex items-center text-sm hover:bg-[#eaf2ff]",
               isOpen && "bg-[#eaf2ff]"
-            }`}
+            )}
             onClick={() => setIsOpen(!isOpen)}>
-            <span>Community</span>
+            <span>Join Community</span>
           </button>
           {isOpen && (
-            <ul className="absolute w-32 text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 -left-1">
+            <div className="absolute w-[35%] text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 -left-1">
               {Links.map((link) => (
-                <li key={link.label} className="hover:underline">
-                  <Link href={link.href}>{link.label}</Link>
-                </li>
+                <Link key={link.label} href={link.href} className="hover:underline block">
+                  <span>{link.label}</span>
+                </Link>
               ))}
-            </ul>
+            </div>
           )}
+          <SubstackEmbed />
         </div>
       </nav>
     </header>

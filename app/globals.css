@@ -74,6 +74,27 @@
   background-position: bottom;
 }
 
+.custom-substack-widget input {
+  padding: 0px 8px 0px 14px !important;
+  font-size: 14px !important;
+  @apply !rounded-l-lg placeholder:font-normal;
+}
+
+.custom-substack-widget {
+  border: 0px !important;
+}
+
+.custom-substack-widget button {
+  @apply !border-l-2 !border-[#1A0C6D] ring-2 ring-[#1A0C6D] !rounded-r-lg !text-[14.5px] transition;
+}
+
+.custom-substack-widget button:hover {
+  @apply hover:bg-[#eaf2ff];
+}
+
+.custom-substack-widget + .error {
+  @apply absolute text-xs top-8 !text-red-500 font-medium;
+}
 @layer base {
   * {
     @apply border-border;

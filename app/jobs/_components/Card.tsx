@@ -24,8 +24,8 @@ const Card = ({ job }: JobProps) => {
   const jobDescriptionLink =
     job.jobDescription && job.jobDescription.startsWith("http") ? job.jobDescription : "#";
 
-  console.log(job.logo);
-  console.log(job.jobDescription);
+  // console.log(job.logo);
+  // console.log(job.jobDescription);
 
   return (
     <Link

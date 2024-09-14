@@ -44,7 +44,14 @@ const JobsPage = () => {
           const jobs = await response.json();
           setAllJobs(jobs);
           setFilteredJobs(jobs);
-          handleFilters(jobs, selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle);
+          handleFilters(
+            jobs,
+            selectedJobFunction,
+            selectedJobType,
+            activeCategories,
+            searchLocation,
+            searchTitle
+          );
         } else {
           console.error("Failed to fetch jobs:", response.statusText);
         }
@@ -82,18 +89,24 @@ const JobsPage = () => {
       const matchesJobType =
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
-            if (type === "Remote") {
-              return job.type === "Remote" && job.hybrid === "False";
-            } else {
-              return job.hybrid === "True";
-            }
-          })
+              if (type === "Remote") {
+                return job.type === "Remote" && job.hybrid === "False";
+              } else {
+                return job.hybrid === "True";
+              }
+            })
           : true;
 
-      const matchesLocation = location ? job.location.toLowerCase().includes(location.toLowerCase()) : true;
-      const matchesTitle = searchTitle ? job.role.toLowerCase().includes(title.toLowerCase()) : true;
+      const matchesLocation = location
+        ? job.location.toLowerCase().includes(location.toLowerCase())
+        : true;
+      const matchesTitle = searchTitle
+        ? job.role.toLowerCase().includes(title.toLowerCase())
+        : true;
 
-      return matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle;
+      return (
+        matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle
+      );
     });
 
     setFilteredJobs(filtered);
@@ -108,11 +121,18 @@ const JobsPage = () => {
   };
 
   useEffect(() => {
-    handleFilters(allJobs, selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle);
+    handleFilters(
+      allJobs,
+      selectedJobFunction,
+      selectedJobType,
+      activeCategories,
+      searchLocation,
+      searchTitle
+    );
   }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
 
   return (
-    <main className="pb-10 mx-auto">
+    <main className="pb-10 mx-auto" id="job-dashboard">
       <div className="bg-[#f7fafc] px-7 md:px-12 py-16">
         <div className="mx-auto flex flex-col gap-14">
           <div className="bg-white border-[1.5px] rounded-sm flex flex-col">

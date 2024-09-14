@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 
 const Links = [
   { href: "/jobs", label: "Search Jobs" },
-  { href: "/addJobs", label: "Add Jobs" },
+  {
+    href: "https://docs.google.com/forms/d/e/1FAIpQLSeVUwPQ2nNemq8pXbxs5nKmxi4hsSDHkcpWU3hJjcPUx7l_Jw/viewform",
+    label: "Add Jobs",
+  },
 ];
 
 const SecondaryNavbar = () => {

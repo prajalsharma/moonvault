@@ -24,9 +24,6 @@ const Card = ({ job }: JobProps) => {
   const jobDescriptionLink =
     job.jobDescription && job.jobDescription.startsWith("http") ? job.jobDescription : "#";
 
-  // console.log(job.logo);
-  // console.log(job.jobDescription);
-
   return (
     <Link
       className="bg-white rounded p-4 flex card transition-shadow items-center border hover:shadow-md"

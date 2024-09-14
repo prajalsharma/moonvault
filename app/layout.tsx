@@ -25,7 +25,7 @@ export default function RootLayout({
           <Header />
           <div>
             <section className="main-section h-screen flex justify-center items-center bg-[#eaf2ff]">
-              <h1 className="text-xl md:text-4xl font-bold">EigenJobs(this is for future stuff)</h1>
+              <h1 className="text-xl md:text-4xl font-bold">EigenJobs is a community initiative built with the support of the EigenLayer team, dedicated to helping founders connect with top talent and builders find good opportunities within the EigenLayer ecosystem</h1>
             </section>
             <SecondaryNavbar />
           </div>

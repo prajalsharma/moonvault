@@ -27,8 +27,10 @@ const multiSelectVariants = cva("m-1 transition ease-in-out delay-150 duration-3
   variants: {
     variant: {
       default: "border-foreground/10 text-foreground bg-card hover:bg-card/80",
-      secondary: "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
-      destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+      secondary:
+        "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
+      destructive:
+        "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
       inverted: "inverted",
     },
   },
@@ -192,7 +194,10 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start" onEscapeKeyDown={() => setIsPopoverOpen(false)}>
+          <PopoverContent
+            className="w-60 sm:w-[32rem] md:w-40 lg:w-72 mx-auto p-0"
+            align="start"
+            onEscapeKeyDown={() => setIsPopoverOpen(false)}>
             <Command>
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
@@ -207,11 +212,15 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
                         <div
                           className={cn(
                             "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                            isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
+                            isSelected
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
                           )}>
                           <CheckIcon className="h-4 w-4" />
                         </div>
-                        {option.icon && <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />}
+                        {option.icon && (
+                          <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                        )}
                         <span>{option.label}</span>
                       </CommandItem>
                     );
@@ -231,63 +240,6 @@ export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>
             />
           )}
         </Popover>
-        <div className="flex">
-          <div className="flex items-center flex-wrap">
-            {selectedValues.slice(0, maxCount).map((value) => {
-              const option = options.find((o) => o.value === value);
-              const IconComponent = option?.icon;
-              return (
-                <Badge
-                  key={value}
-                  className={cn(isAnimating ? "animate-bounce" : "", multiSelectVariants({ variant }))}
-                  style={{ animationDuration: `${animation}s` }}>
-                  {IconComponent && <IconComponent className="h-4 w-4 mr-2" />}
-                  {option?.label}
-                  <XCircle
-                    className="ml-2 h-4 w-4 cursor-pointer"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      toggleOption(value);
-                    }}
-                  />
-                </Badge>
-              );
-            })}
-            {selectedValues.length > maxCount && (
-              <Badge
-                className={cn(
-                  "bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
-                  isAnimating ? "animate-bounce" : "",
-                  multiSelectVariants({ variant })
-                )}
-                style={{ animationDuration: `${animation}s` }}>
-                {`+ ${selectedValues.length - maxCount} more`}
-                <XCircle
-                  className="ml-2 h-4 w-4 cursor-pointer"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    clearExtraOptions();
-                  }}
-                />
-              </Badge>
-            )}
-            <Command className="bg-transparent">
-              <CommandList>
-                <CommandGroup>
-                  <div className="flex items-center justify-between">
-                    {selectedValues.length > 0 && (
-                      <>
-                        <CommandItem onSelect={handleClear} className="justify-center cursor-pointer rounded-xl">
-                          Clear all <XIcon className="h-4 cursor-pointer text-muted-foreground" />
-                        </CommandItem>
-                      </>
-                    )}
-                  </div>
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </div>
-        </div>
       </>
     );
   }

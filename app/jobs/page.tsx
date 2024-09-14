@@ -1,30 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import TextFilter from "./_components/TextFilter";
 import Card from "./_components/Card";
+import TextFilter from "./_components/TextFilter";
 import LocationFilter from "./_components/LocationFilter";
-import SecondaryNavbar from "@/components/SecondaryNavbar";
-import { MultiSelect } from "@/components/MultiSelector";
-import { Button } from "@/components/ui/button";
-
-const jobType = [
-  { value: "hybrid", label: "On-Site" },
-  { value: "Remote", label: "Remote" },
-];
-
-const jobFunction = [
-  { value: "software_engineering", label: "Software Engineering" },
-  { value: "marketing_communication", label: "Marketing Communication" },
-  { value: "sales_business_dev", label: "Sales Business Dev" },
-  { value: "data_science", label: "Data Science" },
-  { value: "research_development", label: "Research Development" },
-  { value: "product_management", label: "Product Management" },
-  { value: "design_ux", label: "Design UX" },
-  { value: "content", label: "Content" },
-  { value: "other_engineering", label: "Other Engineering" },
-  { value: "devops_infrastructure", label: "DevOps Infrastructure" },
-  { value: "accounting_finance", label: "Accounting Finance" }
-];
+import MultiSelectFilter from "./_components/MultiSelectFilter";
+import CategoryButtons from "./_components/CategoryButtons";
 
 interface Job {
   id: string;
@@ -44,59 +24,65 @@ const JobsPage = () => {
   const [selectedJobType, setSelectedJobType] = useState<string[]>([]);
   const [filteredjobs, setFilteredJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
-  const [category, setCategory] = useState<string>("");
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
 
-  const handleFilterChange = () => {
-
-  }
+  const handleFilterChange = () => {};
 
   const handleLocationChange = (data: string) => {
     console.log(data);
-  }
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('/api/jobs');
+        const response = await fetch("/api/jobs");
         if (response.ok) {
           const jobs = await response.json();
           setAllJobs(jobs);
           setFilteredJobs(jobs);
-          handleFilters(jobs, selectedJobFunction, selectedJobType, category);
+          handleFilters(jobs, selectedJobFunction, selectedJobType, activeCategories);
         } else {
-          console.error('Failed to fetch jobs:', response.statusText);
+          console.error("Failed to fetch jobs:", response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching jobs:', error);
+        console.error("Error fetching jobs:", error);
       }
     };
 
     fetchJobs();
-  }, [selectedJobFunction, selectedJobType, category]);
+  }, [selectedJobFunction, selectedJobType, activeCategories]);
 
-  const handleFilters = (jobs: Job[], selectedJobFunctions: string[], selectedJobTypes: string[], category: string) => {
-    if (selectedJobFunctions.length === 0 && selectedJobTypes.length === 0 && !category) {
+  const handleFilters = (
+    jobs: Job[],
+    selectedJobFunctions: string[],
+    selectedJobTypes: string[],
+    categories: string[]
+  ) => {
+    if (
+      selectedJobFunctions.length === 0 &&
+      selectedJobTypes.length === 0 &&
+      categories.length === 0
+    ) {
       setFilteredJobs(jobs);
       return;
     }
 
     const filtered = jobs.filter((job) => {
-      const matchesCategory = category ? job.category === category : true;
+      const matchesCategory = categories.length > 0 ? categories.includes(job.category) : true;
 
-      const matchesJobFunction = selectedJobFunctions.length > 0
-        ? selectedJobFunctions.includes(job.jobFunction)
-        : true;
+      const matchesJobFunction =
+        selectedJobFunctions.length > 0 ? selectedJobFunctions.includes(job.jobFunction) : true;
 
-      const matchesJobType = selectedJobTypes.length > 0
-        ? selectedJobTypes.some((type) => {
-          if (type === "Remote") {
-            return job.type === "Remote" && job.hybrid === "False";
-          } else {
-            return job.hybrid === "True";
-          }
-          return true;
-        })
-        : true;
+      const matchesJobType =
+        selectedJobTypes.length > 0
+          ? selectedJobTypes.some((type) => {
+              if (type === "Remote") {
+                return job.type === "Remote" && job.hybrid === "False";
+              } else {
+                return job.hybrid === "True";
+              }
+            })
+          : true;
 
       return matchesCategory && matchesJobFunction && matchesJobType;
     });
@@ -105,62 +91,42 @@ const JobsPage = () => {
   };
 
   const handleCategory = (cate: string) => {
-    setCategory(cate);
-    handleFilters(allJobs, selectedJobFunction, selectedJobType, cate);
+    setActiveCategories((prevCategories) =>
+      prevCategories.includes(cate)
+        ? prevCategories.filter((cat) => cat !== cate)
+        : [...prevCategories, cate]
+    );
   };
 
   useEffect(() => {
-    handleFilters(allJobs, selectedJobFunction, selectedJobType, category);
-  }, [selectedJobFunction, selectedJobType, category]);
+    handleFilters(allJobs, selectedJobFunction, selectedJobType, activeCategories);
+  }, [selectedJobFunction, selectedJobType, activeCategories]);
+
   return (
-    <main className="pt-20 pb-10 mx-auto">
-      <div className="bg-[#f7fafc] px-7 pt-32 pb-2">
-        <div className="lg:w-[57rem] mx-auto flex flex-col gap-14">
-          <div className="bg-white border-[1.5px] rounded-sm flex flex-col gap-4">
-            <div className="flex flex-col lg:gap-4 lg:flex-row  divide-y-[1.5px] md:divide-x-[1.5px] md:divide-y-0 border-b">
+    <main className="pb-10 mx-auto">
+      <div className="bg-[#f7fafc] px-7 md:px-12 py-16">
+        <div className="mx-auto flex flex-col gap-14">
+          <div className="bg-white border-[1.5px] rounded-sm flex flex-col">
+            <div className="flex flex-col lg:gap-4 lg:flex-row divide-y-[1.5px] md:divide-x-[1.5px] md:divide-y-0 border-b">
               <TextFilter onTextFilterChange={handleFilterChange} />
-              <LocationFilter onLocationFilterChange={handleLocationChange}/>
+              <LocationFilter onLocationFilterChange={handleLocationChange} />
             </div>
-            <div className="flex px-4 pb-3">
-              <div>
-                <MultiSelect
-                  options={jobFunction}
-                  onValueChange={(value) => setSelectedJobFunction(value)}
-                  defaultValue={selectedJobFunction}
-                  className="w-[150px]"
-                  placeholder="Job Function"
+            <div className="flex flex-col px-4 py-3 items-center w-full gap-4">
+              <MultiSelectFilter
+                selectedJobFunction={selectedJobFunction}
+                setSelectedJobFunction={setSelectedJobFunction}
+                selectedJobType={selectedJobType}
+                setSelectedJobType={setSelectedJobType}>
+                <CategoryButtons
+                  activeCategories={activeCategories}
+                  handleCategory={handleCategory}
                 />
-              </div>
-              <div className="ml-[30px]">
-                <MultiSelect
-                  options={jobType}
-                  onValueChange={(value) => setSelectedJobType(value)}
-                  defaultValue={selectedJobType}
-                  className="w-[6.8rem]"
-                  placeholder="Job Type"
-                />
-              </div>
-              <div className="ml-[207px]">
-                <div className="space-x-[13px]">
-                  <Button className="rounded-full" onClick={() => handleCategory("AVS")}>
-                    AVS
-                  </Button>
-                  <Button className="rounded-full" onClick={() => handleCategory("Operator")}>
-                    Operator
-                  </Button>
-                  <Button className="rounded-full" onClick={() => handleCategory("EigenDA")}>
-                    EigenDA
-                  </Button>
-                </div>
-              </div>
+              </MultiSelectFilter>
             </div>
-          </div>
-          <div>
-            <SecondaryNavbar />
           </div>
         </div>
       </div>
-      <div className="pt-10 flex flex-col gap-5 lg:w-[57rem] mx-auto px-7 lg:px-0">
+      <div className="pt-10 flex flex-col gap-5 mx-auto px-7 md:px-12">
         <p className="text-sm text-slate-800">
           Showing <span className="font-bold">{filteredjobs.length}</span> jobs
         </p>

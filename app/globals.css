@@ -67,6 +67,13 @@
   flex: 1 0 18%;
 }
 
+.main-section {
+  background-image: url("/assets/layered-waves.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+}
+
 @layer base {
   * {
     @apply border-border;

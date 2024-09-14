@@ -28,7 +28,7 @@ const Header = () => {
               className="size-5"
             />
           </div>
-          <span className="text-3xl">Eigen Layer</span>
+          <span className="text-3xl">Eigen Jobs</span>
         </div>
         <div className="relative md:hidden">
           <button

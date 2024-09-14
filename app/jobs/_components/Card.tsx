@@ -20,6 +20,8 @@ interface JobProps {
   job: Job;
 }
 
+const excludedValues = ["N/A", "nil", "null"];
+
 const Card = ({ job }: JobProps) => {
   const jobDescriptionLink =
     job.jobDescription && job.jobDescription.startsWith("http") ? job.jobDescription : "#";
@@ -47,10 +49,12 @@ const Card = ({ job }: JobProps) => {
             <h2 className="font-semibold text-sm sm:text-[1.125rem]">{job.role}</h2>
             <p className="font-medium text-sm">{job.company}</p>
             <div className="flex gap-2 items-center">
-              <p className="text-sm text-[#1a0c6d] font-medium bg-[#1a0c6d]/10 px-2 rounded-xl border">
-                {job.type}
-              </p>
-              {job.category && job.category !== "N/A" && (
+              {job.type && !excludedValues.includes(job.type) && (
+                <p className="text-sm text-[#1a0c6d] font-medium bg-[#1a0c6d]/10 px-2 rounded-xl border">
+                  {job.type}
+                </p>
+              )}
+              {job.category && !excludedValues.includes(job.category) && (
                 <p
                   className={cn(
                     "text-sm text-[#1a0c6d] font-medium px-2 rounded-xl border",
@@ -63,7 +67,7 @@ const Card = ({ job }: JobProps) => {
               )}
             </div>
           </div>
-          {job.location && job.location !== "N/A" && (
+          {job.location && !excludedValues.includes(job.location) && (
             <div>
               <p className="text-sm flex font-medium items-center gap-1">
                 <MapPin className="text-[#1a0c6d] size-4" />

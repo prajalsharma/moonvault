@@ -25,11 +25,15 @@ const JobsPage = () => {
   const [filteredjobs, setFilteredJobs] = useState<Job[]>([]);
   const [allJobs, setAllJobs] = useState<Job[]>([]);
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
+  const [searchLocation, setSearchLocation] = useState<string>("");
+  const [searchTitle, setSearchTitle] = useState<string>("");
 
-  const handleFilterChange = () => {};
+  const handleFilterChange = (data: string) => {
+    setSearchTitle(data);
+  };
 
   const handleLocationChange = (data: string) => {
-    console.log(data);
+    setSearchLocation(data);
   };
 
   useEffect(() => {
@@ -40,7 +44,7 @@ const JobsPage = () => {
           const jobs = await response.json();
           setAllJobs(jobs);
           setFilteredJobs(jobs);
-          handleFilters(jobs, selectedJobFunction, selectedJobType, activeCategories);
+          handleFilters(jobs, selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle);
         } else {
           console.error("Failed to fetch jobs:", response.statusText);
         }
@@ -50,18 +54,22 @@ const JobsPage = () => {
     };
 
     fetchJobs();
-  }, [selectedJobFunction, selectedJobType, activeCategories]);
+  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
 
   const handleFilters = (
     jobs: Job[],
     selectedJobFunctions: string[],
     selectedJobTypes: string[],
-    categories: string[]
+    categories: string[],
+    location: string,
+    title: string
   ) => {
     if (
       selectedJobFunctions.length === 0 &&
       selectedJobTypes.length === 0 &&
-      categories.length === 0
+      categories.length === 0 &&
+      !location &&
+      !title
     ) {
       setFilteredJobs(jobs);
       return;
@@ -69,22 +77,23 @@ const JobsPage = () => {
 
     const filtered = jobs.filter((job) => {
       const matchesCategory = categories.length > 0 ? categories.includes(job.category) : true;
-
       const matchesJobFunction =
         selectedJobFunctions.length > 0 ? selectedJobFunctions.includes(job.jobFunction) : true;
-
       const matchesJobType =
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
-              if (type === "Remote") {
-                return job.type === "Remote" && job.hybrid === "False";
-              } else {
-                return job.hybrid === "True";
-              }
-            })
+            if (type === "Remote") {
+              return job.type === "Remote" && job.hybrid === "False";
+            } else {
+              return job.hybrid === "True";
+            }
+          })
           : true;
 
-      return matchesCategory && matchesJobFunction && matchesJobType;
+      const matchesLocation = location ? job.location.toLowerCase().includes(location.toLowerCase()) : true;
+      const matchesTitle = searchTitle ? job.role.toLowerCase().includes(title.toLowerCase()) : true;
+
+      return matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle;
     });
 
     setFilteredJobs(filtered);
@@ -99,8 +108,8 @@ const JobsPage = () => {
   };
 
   useEffect(() => {
-    handleFilters(allJobs, selectedJobFunction, selectedJobType, activeCategories);
-  }, [selectedJobFunction, selectedJobType, activeCategories]);
+    handleFilters(allJobs, selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle);
+  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
 
   return (
     <main className="pb-10 mx-auto">

@@ -37,7 +37,7 @@ const MultiSelectFilter = ({
 }: MultiSelectFilterProps) => {
   return (
     <>
-      <div className="w-full flex flex-col md:flex-row gap-3 items-center relative">
+      <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-3 relative items-center">
         <MultiSelect
           options={jobFunctionOptions}
           onValueChange={setSelectedJobFunction}

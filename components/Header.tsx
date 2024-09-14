@@ -44,7 +44,7 @@ const Header = () => {
           <div
             className={cn(
               "absolute text-sm bg-white py-7 text-[#1a0c6d] top-14 h-screen w-screen transition-all duration-500 flex flex-col gap-2",
-              isOpen ? "-right-[1.75rem]" : "-right-[40rem]"
+              isOpen ? "-right-[1.75rem]" : "-right-[72rem]"
             )}>
             <button
               className="w-full flex justify-between px-7 text-base"

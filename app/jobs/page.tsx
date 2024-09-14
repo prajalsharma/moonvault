@@ -111,7 +111,7 @@ const JobsPage = () => {
               <TextFilter onTextFilterChange={handleFilterChange} />
               <LocationFilter onLocationFilterChange={handleLocationChange} />
             </div>
-            <div className="flex flex-col px-4 py-3 items-center w-full gap-4">
+            <div className="flex flex-col px-4 py-3 w-full gap-4 ">
               <MultiSelectFilter
                 selectedJobFunction={selectedJobFunction}
                 setSelectedJobFunction={setSelectedJobFunction}

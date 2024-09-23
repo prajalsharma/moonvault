@@ -1,12 +1,16 @@
 import { getJobs } from '../../../lib/notion';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const posts = await getJobs();
-        return NextResponse.json(posts, { status: 200 });
+        const { searchParams } = new URL(request.url);
+        const cursor = searchParams.get('cursor');
+
+        const jobsData = await getJobs(cursor || undefined);
+
+        return NextResponse.json(jobsData, { status: 200 });
     } catch (error) {
-        console.error('Error fetching blog posts:', error);
+        console.error('Error fetching jobs:', error);
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
     }
 }

@@ -2,7 +2,7 @@ import { Client } from "@notionhq/client";
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-export async function getJobs() {
+export async function getJobs(cursor?: string) {
   try {
     const databaseId = process.env.NOTION_DATABASE_ID;
     if (!databaseId) {
@@ -11,10 +11,16 @@ export async function getJobs() {
 
     const response = await notion.databases.query({
       database_id: databaseId,
+      start_cursor: cursor,
+      page_size: 100,
     });
 
-    return response.results.map((page: any) => {
-      const getProperty = (property: any, type: string, defaultValue = "N/A") => {
+    const jobs = response.results.map((page: any) => {
+      const getProperty = (
+        property: any,
+        type: string,
+        defaultValue = "N/A"
+      ) => {
         if (!property) return defaultValue;
         switch (type) {
           case "title":
@@ -51,6 +57,12 @@ export async function getJobs() {
         logo: getRichTextContent(page.properties["Image"]?.rich_text),
       };
     });
+
+    return {
+      jobs,
+      hasMore: response.has_more,
+      nextCursor: response.next_cursor,
+    };
   } catch (error) {
     console.error("Error fetching jobs from Notion:", error);
     throw error;

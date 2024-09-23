@@ -37,32 +37,58 @@ const JobsPage = () => {
   };
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch("/api/jobs");
-        if (response.ok) {
-          const jobs = await response.json();
-          setAllJobs(jobs);
-          setFilteredJobs(jobs);
-          handleFilters(
-            jobs,
-            selectedJobFunction,
-            selectedJobType,
-            activeCategories,
-            searchLocation,
-            searchTitle
-          );
-        } else {
-          console.error("Failed to fetch jobs:", response.statusText);
+    const fetchAllJobs = async () => {
+      let allJobs: Job[] = [];
+      let hasMore = true;
+      let cursor: string | null = null;
+  
+      while (hasMore) {
+        try {
+          const url: string = cursor
+            ? `/api/jobs?cursor=${cursor}`
+            : "/api/jobs";
+  
+          const response = await fetch(url);
+          
+          if (response.ok) {
+            const data = await response.json();
+            
+            allJobs = [...allJobs, ...data.jobs];
+            allJobs = allJobs.reverse();
+  
+            setAllJobs(allJobs);
+            setFilteredJobs(allJobs);
+            handleFilters(
+              allJobs,
+              selectedJobFunction,
+              selectedJobType,
+              activeCategories,
+              searchLocation,
+              searchTitle
+            );
+
+            hasMore = data.hasMore;
+            cursor = data.nextCursor;
+          } else {
+            console.error("Failed to fetch jobs:", response.statusText);
+            hasMore = false;
+          }
+        } catch (error) {
+          console.error("Error fetching jobs:", error);
+          hasMore = false; 
         }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
       }
     };
-
-    fetchJobs();
-  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
-
+  
+    fetchAllJobs();
+  }, [
+    selectedJobFunction,
+    selectedJobType,
+    activeCategories,
+    searchLocation,
+    searchTitle
+  ]);
+  
   const handleFilters = (
     jobs: Job[],
     selectedJobFunctions: string[],

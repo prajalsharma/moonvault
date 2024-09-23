@@ -41,32 +41,20 @@ const JobsPage = () => {
       let allJobs: Job[] = [];
       let hasMore = true;
       let cursor: string | null = null;
-  
+      let allJobsIntMid: Job[] = [];
+
       while (hasMore) {
         try {
           const url: string = cursor
             ? `/api/jobs?cursor=${cursor}`
             : "/api/jobs";
-  
+
           const response = await fetch(url);
-          
+
           if (response.ok) {
             const data = await response.json();
-            
-            allJobs = [...allJobs, ...data.jobs];
-            allJobs = allJobs.reverse();
-  
-            setAllJobs(allJobs);
-            setFilteredJobs(allJobs);
-            handleFilters(
-              allJobs,
-              selectedJobFunction,
-              selectedJobType,
-              activeCategories,
-              searchLocation,
-              searchTitle
-            );
 
+            allJobsIntMid = [...allJobsIntMid, ...data.jobs];
             hasMore = data.hasMore;
             cursor = data.nextCursor;
           } else {
@@ -75,20 +63,42 @@ const JobsPage = () => {
           }
         } catch (error) {
           console.error("Error fetching jobs:", error);
-          hasMore = false; 
+          hasMore = false;
         }
       }
+
+      allJobs = [...allJobsIntMid].reverse();
+      setAllJobs(allJobs);
+      setFilteredJobs(allJobs);
     };
-  
+
     fetchAllJobs();
+  }, []);
+
+  useEffect(() => {
+    const applyFilters = () => {
+      handleFilters(
+        allJobs,
+        selectedJobFunction,
+        selectedJobType,
+        activeCategories,
+        searchLocation,
+        searchTitle
+      );
+    };
+
+    if (allJobs.length > 0) {
+      applyFilters();
+    }
   }, [
+    allJobs,
     selectedJobFunction,
     selectedJobType,
     activeCategories,
     searchLocation,
-    searchTitle
+    searchTitle,
   ]);
-  
+
   const handleFilters = (
     jobs: Job[],
     selectedJobFunctions: string[],
@@ -109,9 +119,12 @@ const JobsPage = () => {
     }
 
     const filtered = jobs.filter((job) => {
-      const matchesCategory = categories.length > 0 ? categories.includes(job.category) : true;
+      const matchesCategory =
+        categories.length > 0 ? categories.includes(job.category) : true;
       const matchesJobFunction =
-        selectedJobFunctions.length > 0 ? selectedJobFunctions.includes(job.jobFunction) : true;
+        selectedJobFunctions.length > 0
+          ? selectedJobFunctions.includes(job.jobFunction)
+          : true;
       const matchesJobType =
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
@@ -131,7 +144,11 @@ const JobsPage = () => {
         : true;
 
       return (
-        matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle
+        matchesCategory &&
+        matchesJobFunction &&
+        matchesJobType &&
+        matchesLocation &&
+        matchesTitle
       );
     });
 
@@ -155,7 +172,13 @@ const JobsPage = () => {
       searchLocation,
       searchTitle
     );
-  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
+  }, [
+    selectedJobFunction,
+    selectedJobType,
+    activeCategories,
+    searchLocation,
+    searchTitle,
+  ]);
 
   return (
     <main className="pb-10 mx-auto" id="job-dashboard">
@@ -171,7 +194,8 @@ const JobsPage = () => {
                 selectedJobFunction={selectedJobFunction}
                 setSelectedJobFunction={setSelectedJobFunction}
                 selectedJobType={selectedJobType}
-                setSelectedJobType={setSelectedJobType}>
+                setSelectedJobType={setSelectedJobType}
+              >
                 <CategoryButtons
                   activeCategories={activeCategories}
                   handleCategory={handleCategory}

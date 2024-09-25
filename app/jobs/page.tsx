@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Card from "./_components/Card";
 import TextFilter from "./_components/TextFilter";
 import LocationFilter from "./_components/LocationFilter";
@@ -41,7 +41,6 @@ const JobsPage = () => {
       let allJobs: Job[] = [];
       let hasMore = true;
       let cursor: string | null = null;
-      let allJobsIntMid: Job[] = [];
 
       while (hasMore) {
         try {
@@ -54,7 +53,12 @@ const JobsPage = () => {
           if (response.ok) {
             const data = await response.json();
 
-            allJobsIntMid = [...allJobsIntMid, ...data.jobs];
+            allJobs = [...allJobs, ...data.jobs];
+            allJobs = allJobs.reverse();
+
+            setAllJobs(allJobs);
+            setFilteredJobs(allJobs);
+
             hasMore = data.hasMore;
             cursor = data.nextCursor;
           } else {
@@ -66,10 +70,6 @@ const JobsPage = () => {
           hasMore = false;
         }
       }
-
-      allJobs = [...allJobsIntMid].reverse();
-      setAllJobs(allJobs);
-      setFilteredJobs(allJobs);
     };
 
     fetchAllJobs();

@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { ImageOff, MapPin } from "lucide-react";
 import Image from "next/image";
@@ -82,3 +83,28 @@ const Card = ({ job }: JobProps) => {
 };
 
 export default Card;
+
+Card.Skeleton = function CardSkeleton() {
+  return (
+    <div className="relative">
+      <Skeleton className="rounded w-full h-[6.5831rem] p-[.125rem]">
+        <div className="size-full bg-white z-50 flex gap-4 items-center p-4">
+          <Skeleton className="w-[72px] h-[72px] rounded" />
+          <div className="flex flex-1 flex-col md:flex-row justify-between gap-1">
+            <div className="flex flex-col gap-1 items-start w-full">
+              <Skeleton className="w-full h-[1.125rem] md:h-5" />
+              <Skeleton className="w-1/2 h-[1.125rem]" />
+              <div className="flex gap-2 items-center w-full">
+                <Skeleton className="w-[20%] h-[1.125rem]" />
+                <Skeleton className="w-[20%] h-[1.125rem]" />
+              </div>
+            </div>
+            <div className="w-full flex md:justify-end">
+              <Skeleton className="w-[40%] md:w-[30%] h-[1.125rem]" />
+            </div>
+          </div>
+        </div>
+      </Skeleton>
+    </div>
+  );
+};

@@ -44,9 +44,7 @@ const JobsPage = () => {
 
       while (hasMore) {
         try {
-          const url: string = cursor
-            ? `/api/jobs?cursor=${cursor}`
-            : "/api/jobs";
+          const url: string = cursor ? `/api/jobs?cursor=${cursor}` : "/api/jobs";
 
           const response = await fetch(url);
 
@@ -119,12 +117,9 @@ const JobsPage = () => {
     }
 
     const filtered = jobs.filter((job) => {
-      const matchesCategory =
-        categories.length > 0 ? categories.includes(job.category) : true;
+      const matchesCategory = categories.length > 0 ? categories.includes(job.category) : true;
       const matchesJobFunction =
-        selectedJobFunctions.length > 0
-          ? selectedJobFunctions.includes(job.jobFunction)
-          : true;
+        selectedJobFunctions.length > 0 ? selectedJobFunctions.includes(job.jobFunction) : true;
       const matchesJobType =
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
@@ -144,11 +139,7 @@ const JobsPage = () => {
         : true;
 
       return (
-        matchesCategory &&
-        matchesJobFunction &&
-        matchesJobType &&
-        matchesLocation &&
-        matchesTitle
+        matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle
       );
     });
 
@@ -172,18 +163,12 @@ const JobsPage = () => {
       searchLocation,
       searchTitle
     );
-  }, [
-    selectedJobFunction,
-    selectedJobType,
-    activeCategories,
-    searchLocation,
-    searchTitle,
-  ]);
+  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
 
   return (
     <main className="pb-10 mx-auto" id="job-dashboard">
       <div className="bg-[#f7fafc] px-7 md:px-12 py-16">
-        <div className="mx-auto flex flex-col gap-14">
+        <div className="mx-auto flex flex-col gap-14 max-w-[70.75rem]">
           <div className="bg-white border-[1.5px] rounded-sm flex flex-col">
             <div className="flex flex-col lg:gap-4 lg:flex-row divide-y-[1.5px] lg:divide-x-[1.5px] lg:divide-y-0 border-b">
               <TextFilter onTextFilterChange={handleFilterChange} />
@@ -194,8 +179,7 @@ const JobsPage = () => {
                 selectedJobFunction={selectedJobFunction}
                 setSelectedJobFunction={setSelectedJobFunction}
                 selectedJobType={selectedJobType}
-                setSelectedJobType={setSelectedJobType}
-              >
+                setSelectedJobType={setSelectedJobType}>
                 <CategoryButtons
                   activeCategories={activeCategories}
                   handleCategory={handleCategory}
@@ -205,14 +189,16 @@ const JobsPage = () => {
           </div>
         </div>
       </div>
-      <div className="pt-10 flex flex-col gap-5 mx-auto px-7 md:px-12">
-        <p className="text-sm text-slate-800">
-          Showing <span className="font-bold">{filteredjobs.length}</span> jobs
-        </p>
-        <div className="flex flex-col gap-3">
-          {filteredjobs.map((job) => (
-            <Card key={job.id} job={job} />
-          ))}
+      <div className="pt-10 px-7 md:px-12">
+        <div className="flex flex-col gap-5 mx-auto max-w-[70.75rem]">
+          <p className="text-sm text-slate-800">
+            Showing <span className="font-bold">{filteredjobs.length}</span> jobs
+          </p>
+          <div className="flex flex-col gap-3">
+            {filteredjobs.map((job) => (
+              <Card key={job.id} job={job} />
+            ))}
+          </div>
         </div>
       </div>
     </main>

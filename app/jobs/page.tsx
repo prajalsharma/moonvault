@@ -5,6 +5,7 @@ import TextFilter from "./_components/TextFilter";
 import LocationFilter from "./_components/LocationFilter";
 import MultiSelectFilter from "./_components/MultiSelectFilter";
 import CategoryButtons from "./_components/CategoryButtons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Job {
   id: string;
@@ -27,6 +28,7 @@ const JobsPage = () => {
   const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [searchLocation, setSearchLocation] = useState<string>("");
   const [searchTitle, setSearchTitle] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleFilterChange = (data: string) => {
     setSearchTitle(data);
@@ -53,10 +55,6 @@ const JobsPage = () => {
 
             allJobs = [...allJobs, ...data.jobs];
             allJobs = allJobs.reverse();
-
-            setAllJobs(allJobs);
-            setFilteredJobs(allJobs);
-
             hasMore = data.hasMore;
             cursor = data.nextCursor;
           } else {
@@ -68,6 +66,9 @@ const JobsPage = () => {
           hasMore = false;
         }
       }
+      setAllJobs(allJobs);
+      setFilteredJobs(allJobs);
+      setLoading(false);
     };
 
     fetchAllJobs();
@@ -191,14 +192,27 @@ const JobsPage = () => {
       </div>
       <div className="pt-10 px-7 md:px-12">
         <div className="flex flex-col gap-5 mx-auto max-w-[70.75rem]">
-          <p className="text-sm text-slate-800">
-            Showing <span className="font-bold">{filteredjobs.length}</span> jobs
-          </p>
-          <div className="flex flex-col gap-3">
-            {filteredjobs.map((job) => (
-              <Card key={job.id} job={job} />
-            ))}
-          </div>
+          {loading ? (
+            <>
+              <Skeleton className="h-[1.6rem] w-[10.2rem]" />
+              <div className="flex flex-col gap-3">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <Card.Skeleton key={index} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-slate-800">
+                Showing <span className="font-bold">{filteredjobs.length}</span> jobs
+              </p>
+              <div className="flex flex-col gap-3">
+                {filteredjobs.map((job) => (
+                  <Card key={job.id} job={job} />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </main>

@@ -44,7 +44,7 @@ const Header = () => {
 
           <div
             className={cn(
-              "absolute text-sm bg-white py-7 text-[#1a0c6d] top-14 h-screen w-screen transition-all duration-500 flex flex-col gap-2",
+              "absolute text-sm bg-white py-7 text-[#1a0c6d] top-12 h-screen w-screen transition-all duration-500 flex flex-col gap-2",
               isOpen ? "-right-[1.75rem]" : "-right-[72rem]"
             )}>
             <button
@@ -60,7 +60,7 @@ const Header = () => {
               <div className="relative">
                 <ul
                   className={cn(
-                    "bg-muted space-y-3 px-7 py-3.5 text-sm absolute top-0 left-0 w-full transition-all duration-500"
+                    "bg-muted space-y-3 px-9 py-3.5 text-sm absolute top-0 left-0 w-full transition-all duration-500"
                   )}>
                   {Links.map((link) => (
                     <li key={link.label}>

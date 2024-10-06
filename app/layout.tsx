@@ -24,16 +24,17 @@ export default function RootLayout({
       <body className={`${plus_jakarata_sans.className}`}>
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <Header />
-          <div>
-            <section className="main-section h-screen flex flex-col justify-center bg-[#eaf2ff] text-sm sm:text-base px-7 items-start gap-3 md:text-center md:items-center">
-              <h1 className="sm:max-w-[35rem] md:max-w-[40rem]">
-                <span className="font-bold text-4xl block text-[#1a0c6d] pb-2">EigenJobs</span> is a
-                community initiative built with the support of the{" "}
-                <span className="font-bold text-[#1a0c6d]">EigenLayer team,</span> dedicated to
-                helping founders connect with top talent and builders find good opportunities within
-                the <span className="font-bold text-[#1a0c6d]">EigenLayer ecosystem.</span>
-              </h1>
-              <ScrollIntoViewButton />
+          <div className="pattern">
+            <section className="main-section relative h-[60vh] flex flex-col justify-center text-sm sm:text-base px-7 pt-28 items-start gap-3 md:text-center md:items-center">
+              <div className="sm:max-w-[35rem] md:max-w-[40rem] mb-8 md:mb-28">
+                <h1 className="font-bold text-4xl block text-[#1a0c6d] pb-2">EigenJobs</h1>
+                <p>
+                  is a community initiative built with the support of the{" "}
+                  <span className="font-bold text-[#1a0c6d]">EigenLayer team,</span> dedicated to
+                  helping founders connect with top talent and builders find good opportunities
+                  within the <span className="font-bold text-[#1a0c6d]">EigenLayer ecosystem.</span>
+                </p>
+              </div>
             </section>
             <SecondaryNavbar />
           </div>

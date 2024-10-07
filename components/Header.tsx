@@ -89,17 +89,19 @@ const Header = () => {
                 "text-[#1a0c6d] bg-white transition-colors py-2 px-3 lg:px-4 rounded-lg flex items-center text-sm hover:bg-[#eaf2ff]",
                 isOpen && "bg-[#eaf2ff]"
               )}
-              onClick={() => setIsOpen(!isOpen)}>
+              onMouseEnter={() => setIsOpen(!isOpen)}>
               <span>Join Community</span>
             </button>
             {isOpen && (
-              <div className="absolute w-full text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 left-0">
+              <ul
+                className="absolute w-full text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 left-0"
+                onMouseLeave={() => setIsOpen(false)}>
                 {Links.map((link) => (
                   <Link key={link.label} href={link.href} className="hover:underline block">
                     <span>{link.label}</span>
                   </Link>
                 ))}
-              </div>
+              </ul>
             )}
           </div>
 

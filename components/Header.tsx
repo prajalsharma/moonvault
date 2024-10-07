@@ -1,9 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { ChevronDown, Menu, X } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import SubstackEmbed from "./SubstackEmbed";
 
 const Links = [
@@ -19,7 +19,7 @@ const Header = () => {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
 
   return (
-    <header className="bg-[#1a0c6d] py-5 px-7 md:px-8 fixed w-full z-50">
+    <header className="bg-[#1a0c6d] py-5 px-7 fixed w-full z-50">
       <nav className="text-white font-bold flex gap-3 items-center relative justify-between mx-auto">
         <div className="flex items-center gap-3">
           <div className="bg-white p-2">
@@ -44,11 +44,16 @@ const Header = () => {
 
           <div
             className={cn(
-              "absolute text-sm bg-white py-7 text-[#1a0c6d] top-12 h-screen w-screen transition-all duration-500 flex flex-col gap-2",
+              "absolute bg-white py-7 text-[#1a0c6d] top-14 h-screen w-screen transition-all duration-500 flex flex-col gap-4 px-7 text-base",
               isOpen ? "-right-[1.75rem]" : "-right-[72rem]"
             )}>
+            <Link
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeVUwPQ2nNemq8pXbxs5nKmxi4hsSDHkcpWU3hJjcPUx7l_Jw/viewform"
+              className="w-full flex items-center">
+              Add Jobs
+            </Link>
             <button
-              className="w-full flex justify-between px-7 text-base"
+              className="w-full flex justify-between"
               onClick={() => setIsOpenMobile(!isOpenMobile)}>
               <span>Community</span>
               <ChevronDown
@@ -60,7 +65,7 @@ const Header = () => {
               <div className="relative">
                 <ul
                   className={cn(
-                    "bg-muted space-y-3 px-9 py-3.5 text-sm absolute top-0 left-0 w-full transition-all duration-500"
+                    "bg-muted space-y-3 px-6 py-3.5 text-sm absolute top-0 left-0 w-full transition-all duration-500"
                   )}>
                   {Links.map((link) => (
                     <li key={link.label}>
@@ -72,24 +77,32 @@ const Header = () => {
             )}
           </div>
         </div>
-        <div className="relative hidden md:flex">
-          <button
-            className={cn(
-              "mr-4 text-[#1a0c6d] bg-white transition-colors py-2 px-3 lg:px-7 rounded-lg flex items-center text-sm hover:bg-[#eaf2ff]",
-              isOpen && "bg-[#eaf2ff]"
+        <div className="relative hidden md:flex md:gap-2">
+          <Link
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeVUwPQ2nNemq8pXbxs5nKmxi4hsSDHkcpWU3hJjcPUx7l_Jw/viewform"
+            className="text-[#1a0c6d] bg-white transition-colors py-2 px-3 lg:px-4 rounded-lg flex items-center text-sm hover:bg-[#eaf2ff]">
+            Add Jobs
+          </Link>
+          <div className="relative flex">
+            <button
+              className={cn(
+                "text-[#1a0c6d] bg-white transition-colors py-2 px-3 lg:px-4 rounded-lg flex items-center text-sm hover:bg-[#eaf2ff]",
+                isOpen && "bg-[#eaf2ff]"
+              )}
+              onClick={() => setIsOpen(!isOpen)}>
+              <span>Join Community</span>
+            </button>
+            {isOpen && (
+              <div className="absolute w-full text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 left-0">
+                {Links.map((link) => (
+                  <Link key={link.label} href={link.href} className="hover:underline block">
+                    <span>{link.label}</span>
+                  </Link>
+                ))}
+              </div>
             )}
-            onClick={() => setIsOpen(!isOpen)}>
-            <span>Join Community</span>
-          </button>
-          {isOpen && (
-            <div className="absolute w-[35%] text-sm bg-white p-4 text-[#1a0c6d] rounded-md drop-shadow-lg space-y-6 top-12 -left-1">
-              {Links.map((link) => (
-                <Link key={link.label} href={link.href} className="hover:underline block">
-                  <span>{link.label}</span>
-                </Link>
-              ))}
-            </div>
-          )}
+          </div>
+
           <SubstackEmbed />
         </div>
       </nav>

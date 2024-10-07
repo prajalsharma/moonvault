@@ -168,7 +168,7 @@ const JobsPage = () => {
 
   return (
     <main className="pb-10 mx-auto" id="job-dashboard">
-      <div className="bg-[#f7fafc] px-7 md:px-12 py-16">
+      <div className="bg-[#f7fafc] px-7 md:px-12 py-12">
         <div className="mx-auto flex flex-col gap-14 max-w-[70.75rem]">
           <div className="bg-white border-[1.5px] rounded-sm flex flex-col">
             <div className="flex flex-col lg:gap-4 lg:flex-row divide-y-[1.5px] lg:divide-x-[1.5px] lg:divide-y-0 border-b">

@@ -26,7 +26,7 @@ export default function RootLayout({
           <Header />
           <div className="pattern">
             <section className="main-section relative h-[60vh] flex flex-col justify-center text-sm sm:text-base px-7 pt-28 items-start gap-3 md:text-center md:items-center">
-              <div className="sm:max-w-[35rem] md:max-w-[40rem] mb-8 md:mb-28">
+              <div className="sm:max-w-[35rem] md:max-w-[40rem] mb-8">
                 <h1 className="font-bold text-4xl block text-[#1a0c6d] pb-2">EigenJobs</h1>
                 <p>
                   is a community initiative built with the support of the{" "}

@@ -1,16 +1,19 @@
-import { getJobs } from '../../../lib/notion';
-import { NextResponse } from 'next/server';
+import connectToMongoose from "@/db/connection";
+import Job from "@/models/job";
+import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const cursor = searchParams.get('cursor');
+export async function GET() {
+  try {
+    await connectToMongoose();
 
-        const jobsData = await getJobs(cursor || undefined);
+    const jobs = await Job.find();
 
-        return NextResponse.json(jobsData, { status: 200 });
-    } catch (error) {
-        console.error('Error fetching jobs:', error);
-        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
-    }
+    return NextResponse.json({ status: 200, jobs });
+  } catch (error) {
+    console.error("Error fetching jobs:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

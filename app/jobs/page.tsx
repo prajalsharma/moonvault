@@ -10,14 +10,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface Job {
   id: string;
   role: string;
-  type: string;
+  jobType: string;
   location: string;
   hybrid: string;
   jobFunction: string;
   jobDescription: string;
   company: string;
   category: string;
-  logo: string;
+  image: string;
 }
 
 const JobsPage = () => {
@@ -41,31 +41,19 @@ const JobsPage = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       let allJobs: Job[] = [];
-      let hasMore = true;
-      let cursor: string | null = null;
 
-      while (hasMore) {
-        try {
-          const url: string = cursor ? `/api/jobs?cursor=${cursor}` : "/api/jobs";
+      try {
+        const response = await fetch("/api/jobs");
+        if (response.ok) {
+          const data = await response.json();
 
-          const response = await fetch(url);
-
-          if (response.ok) {
-            const data = await response.json();
-
-            allJobs = [...allJobs, ...data.jobs];
-            allJobs = allJobs.reverse();
-            hasMore = data.hasMore;
-            cursor = data.nextCursor;
-          } else {
-            console.error("Failed to fetch jobs:", response.statusText);
-            hasMore = false;
-          }
-        } catch (error) {
-          console.error("Error fetching jobs:", error);
-          hasMore = false;
+          allJobs = data.jobs;
+          console.log(allJobs);
         }
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
       }
+
       setAllJobs(allJobs);
       setFilteredJobs(allJobs);
       setLoading(false);
@@ -118,16 +106,19 @@ const JobsPage = () => {
     }
 
     const filtered = jobs.filter((job) => {
-      const matchesCategory = categories.length > 0 ? categories.includes(job.category) : true;
+      const matchesCategory =
+        categories.length > 0 ? categories.includes(job.category) : true;
       const matchesJobFunction =
-        selectedJobFunctions.length > 0 ? selectedJobFunctions.includes(job.jobFunction) : true;
+        selectedJobFunctions.length > 0
+          ? selectedJobFunctions.includes(job.jobFunction)
+          : true;
       const matchesJobType =
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
               if (type === "Remote") {
-                return job.type === "Remote" && job.hybrid === "False";
+                return job.jobType === "Remote" && job.hybrid === "false";
               } else {
-                return job.hybrid === "True";
+                return job.hybrid === "true";
               }
             })
           : true;
@@ -140,7 +131,11 @@ const JobsPage = () => {
         : true;
 
       return (
-        matchesCategory && matchesJobFunction && matchesJobType && matchesLocation && matchesTitle
+        matchesCategory &&
+        matchesJobFunction &&
+        matchesJobType &&
+        matchesLocation &&
+        matchesTitle
       );
     });
 
@@ -164,7 +159,13 @@ const JobsPage = () => {
       searchLocation,
       searchTitle
     );
-  }, [selectedJobFunction, selectedJobType, activeCategories, searchLocation, searchTitle]);
+  }, [
+    selectedJobFunction,
+    selectedJobType,
+    activeCategories,
+    searchLocation,
+    searchTitle,
+  ]);
 
   return (
     <main className="pb-10 mx-auto" id="job-dashboard">
@@ -180,7 +181,8 @@ const JobsPage = () => {
                 selectedJobFunction={selectedJobFunction}
                 setSelectedJobFunction={setSelectedJobFunction}
                 selectedJobType={selectedJobType}
-                setSelectedJobType={setSelectedJobType}>
+                setSelectedJobType={setSelectedJobType}
+              >
                 <CategoryButtons
                   activeCategories={activeCategories}
                   handleCategory={handleCategory}
@@ -204,7 +206,8 @@ const JobsPage = () => {
           ) : (
             <>
               <p className="text-sm text-slate-800">
-                Showing <span className="font-bold">{filteredjobs.length}</span> jobs
+                Showing <span className="font-bold">{filteredjobs.length}</span>{" "}
+                jobs
               </p>
               <div className="flex flex-col gap-3">
                 {filteredjobs.map((job) => (

@@ -5,11 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Job {
-  id: string;
+  _id: string;
   role: string;
   jobType: string;
   location: string;
-  hybrid: string;
+  hybrid: boolean;
   jobFunction: string;
   jobDescription: string;
   company: string;
@@ -25,12 +25,15 @@ const excludedValues = ["N/A", "nil", "null"];
 
 const Card = ({ job }: JobProps) => {
   const jobDescriptionLink =
-    job.jobDescription && job.jobDescription.startsWith("http") ? job.jobDescription : "#";
+    job.jobDescription && job.jobDescription.startsWith("http")
+      ? job.jobDescription
+      : "#";
 
   return (
     <Link
       className="bg-white rounded p-4 flex card transition-shadow items-center border hover:shadow-md"
-      href={jobDescriptionLink}>
+      href={jobDescriptionLink}
+    >
       <div className="flex gap-4 items-center w-full">
         <div className="w-[72px] h-[72px] relative flex items-center justify-center">
           {job.image ? (
@@ -47,7 +50,9 @@ const Card = ({ job }: JobProps) => {
         </div>
         <div className="flex flex-1 flex-col md:flex-row justify-between gap-1">
           <div className="flex flex-col gap-1 items-start">
-            <h2 className="font-semibold text-sm sm:text-[1.125rem]">{job.role}</h2>
+            <h2 className="font-semibold text-sm sm:text-[1.125rem]">
+              {job.role}
+            </h2>
             <p className="font-medium text-sm">{job.company}</p>
             <div className="flex gap-2 items-center">
               {job.jobType && !excludedValues.includes(job.jobType) && (
@@ -62,7 +67,8 @@ const Card = ({ job }: JobProps) => {
                     job.category === "AVS" && "bg-[#4cdf3e]",
                     job.category === "Operator" && "bg-[#ffb800]",
                     job.category === "EigenDA" && "bg-[#cadfff]"
-                  )}>
+                  )}
+                >
                   {job.category}
                 </p>
               )}

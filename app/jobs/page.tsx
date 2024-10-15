@@ -8,11 +8,11 @@ import CategoryButtons from "./_components/CategoryButtons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Job {
-  id: string;
+  _id: string;
   role: string;
   jobType: string;
   location: string;
-  hybrid: string;
+  hybrid: boolean;
   jobFunction: string;
   jobDescription: string;
   company: string;
@@ -48,7 +48,6 @@ const JobsPage = () => {
           const data = await response.json();
 
           allJobs = data.jobs;
-          console.log(allJobs);
         }
       } catch (error) {
         console.error("Error fetching jobs:", error);
@@ -116,9 +115,9 @@ const JobsPage = () => {
         selectedJobTypes.length > 0
           ? selectedJobTypes.some((type) => {
               if (type === "Remote") {
-                return job.jobType === "Remote" && job.hybrid === "false";
+                return job.jobType === "Remote" && job.hybrid === false;
               } else {
-                return job.hybrid === "true";
+                return job.hybrid === true;
               }
             })
           : true;
@@ -211,7 +210,7 @@ const JobsPage = () => {
               </p>
               <div className="flex flex-col gap-3">
                 {filteredjobs.map((job) => (
-                  <Card key={job.id} job={job} />
+                  <Card key={job._id} job={job} />
                 ))}
               </div>
             </>

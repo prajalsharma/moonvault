@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema(
   {
@@ -6,13 +6,17 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    location: {
+    jobType: {
       type: String,
       required: false,
     },
+    location: {
+      type: String,
+      required: true,
+    },
     hybrid: {
       type: Boolean,
-      required: false,
+      required: true,
     },
     jobFunction: {
       type: String,
@@ -38,6 +42,6 @@ const jobSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Job = mongoose.model("Job", jobSchema);
+const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);
 
 export default Job;

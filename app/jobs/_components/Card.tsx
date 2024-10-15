@@ -12,7 +12,7 @@ interface Job {
   hybrid: boolean;
   jobFunction: string;
   jobDescription: string;
-  company: string;
+  project: string;
   category: string;
   image: string;
 }
@@ -53,7 +53,7 @@ const Card = ({ job }: JobProps) => {
             <h2 className="font-semibold text-sm sm:text-[1.125rem]">
               {job.role}
             </h2>
-            <p className="font-medium text-sm">{job.company}</p>
+            <p className="font-medium text-sm">{job.project}</p>
             <div className="flex gap-2 items-center">
               {job.jobType && !excludedValues.includes(job.jobType) && (
                 <p className="text-sm text-[#1a0c6d] font-medium bg-[#1a0c6d]/10 px-2 rounded-xl border">

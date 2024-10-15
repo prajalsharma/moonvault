@@ -15,7 +15,7 @@ interface Job {
   hybrid: boolean;
   jobFunction: string;
   jobDescription: string;
-  company: string;
+  project: string;
   category: string;
   image: string;
 }

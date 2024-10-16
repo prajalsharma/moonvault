@@ -19,7 +19,7 @@ const Header = () => {
   const [isOpenMobile, setIsOpenMobile] = useState(false);
 
   return (
-    <header className="bg-[#1a0c6d] py-5 px-7 fixed w-full z-50">
+    <header className="bg-[#1a0c6d] py-5 px-7 fixed w-full z-[100]">
       <nav className="text-white font-bold flex gap-3 items-center relative justify-between mx-auto">
         <div className="flex items-center gap-3">
           <div className="bg-white p-2">

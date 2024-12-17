@@ -6,13 +6,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    // Connect to the database
+    // Connect to MongoDB
     await connectToMongoose();
 
-    // Fetch jobs sorted by 'id' in ascending order using the static method
+    // Fetch jobs sorted by 'id' in ascending order
     const jobs = await Job.fetchSortedJobs();
 
-    // Return the sorted jobs as a JSON response
+    // Return the sorted jobs as JSON
     const response = NextResponse.json({ status: 200, jobs });
     response.headers.set("Cache-Control", "no-store");
     return response;

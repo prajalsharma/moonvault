@@ -41,6 +41,14 @@ const jobSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+jobSchema.statics.fetchSortedJobs = async function () {
+  try {
+    return await this.find().sort({ id: 1 }); // Sort by 'id' in ascending order
+  } catch (error) {
+    console.error("Error fetching sorted jobs:", error);
+    throw error;
+  }
+};
 
 const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);
 

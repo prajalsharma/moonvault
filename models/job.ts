@@ -12,24 +12,16 @@ const jobSchema = new mongoose.Schema(
     project: { type: String, required: true },
     category: { type: String, required: true },
     image: { type: String, required: true },
-    id: { type: Number, required: true, unique: true }, // Ensure 'id' is numeric and unique
+    id: { type: Number, required: true, unique: true }, // 'id' field for sorting
   },
   { timestamps: true }
 );
 
-// Static method to fetch jobs sorted by 'id' in ascending order
+// Static method to fetch jobs sorted by 'id'
 jobSchema.statics.fetchSortedJobs = async function () {
-  try {
-    const sortedJobs = await this.find({}).sort({ id: 1 }); // Sort by 'id' in ascending order
-    return sortedJobs;
-  } catch (error) {
-    console.error("Error fetching sorted jobs:", error);
-    throw error;
-  }
+  return await this.find({}).sort({ id: 1 }); // Sort by 'id' in ascending order
 };
 
-// Create the Job model
 const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);
 
 export default Job;
-

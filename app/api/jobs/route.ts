@@ -7,7 +7,7 @@ export async function GET() {
   try {
     await connectToMongoose();
 
-    const jobs = await Job.find();
+    const jobs = await Job.find().sort({ id: 1 });
 
     const response = NextResponse.json({ status: 200, jobs });
     response.headers.set("Cache-Control", "no-store");

@@ -42,7 +42,7 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-{ timestamps: true }
+timestamps: true }
 );
 
 // Static method to fetch jobs sorted by 'id'

@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 // Define the Job schema
 const jobSchema = new mongoose.Schema(
   {
- main
     id: {
       type: Number,
     },

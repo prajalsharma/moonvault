@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
+// Define the Job schema
 const jobSchema = new mongoose.Schema(
   {
+ main
     id: {
       type: Number,
     },
@@ -41,9 +43,14 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-  },
+
   { timestamps: true }
 );
+
+// Static method to fetch jobs sorted by 'id'
+jobSchema.statics.fetchSortedJobs = async function () {
+  return await this.find({}).sort({ id: 1 }); // Sort by 'id' in ascending order
+};
 
 const Job = mongoose.models.Job || mongoose.model("Job", jobSchema);
 

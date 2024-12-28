@@ -9,8 +9,11 @@ export async function GET() {
     // Connect to MongoDB
     await connectToMongoose();
 
+main
+    const jobs = await Job.find().sort({ id: 1 });
+=======
     // Fetch jobs sorted by 'id' in ascending order
-    const jobs = await Job.fetchSortedJobs();
+    
 
     // Return the sorted jobs as JSON
     const response = NextResponse.json({ status: 200, jobs });

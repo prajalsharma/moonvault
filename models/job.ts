@@ -3,17 +3,47 @@ import mongoose from "mongoose";
 // Define the Job schema
 const jobSchema = new mongoose.Schema(
   {
-    role: { type: String, required: true },
-    jobType: { type: String, required: false },
-    location: { type: String, required: true },
-    hybrid: { type: Boolean, required: true },
-    jobFunction: { type: String, required: true },
-    jobDescription: { type: String, required: true },
-    project: { type: String, required: true },
-    category: { type: String, required: true },
-    image: { type: String, required: true },
-    id: { type: Number, required: true, unique: true }, // 'id' field for sorting
-  },
+ main
+    id: {
+      type: Number,
+    },
+    role: {
+      type: String,
+      required: true,
+    },
+    jobType: {
+      type: String,
+      required: false,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    hybrid: {
+      type: Boolean,
+      required: true,
+    },
+    jobFunction: {
+      type: String,
+      required: true,
+    },
+    jobDescription: {
+      type: String,
+      required: true,
+    },
+    project: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+
   { timestamps: true }
 );
 

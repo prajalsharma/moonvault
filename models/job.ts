@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const jobSchema = new mongoose.Schema(
   {
     id: {
-      type: Number,
+      type: mongoose.Schema.Types.Number, // Explicitly specify the Mongoose type
     },
     role: {
       type: String,
@@ -42,7 +42,10 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-timestamps: true }
+  },
+  {
+    timestamps: true, // Correctly position the timestamps option
+  }
 );
 
 // Static method to fetch jobs sorted by 'id'

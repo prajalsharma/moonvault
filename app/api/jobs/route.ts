@@ -9,7 +9,7 @@ export async function GET() {
     // Connect to MongoDB
     await connectToMongoose();
 
-    const jobs = await Job.find().sort({ id: 1 });
+    const jobs = await Job.find().sort({ id: -1 });
 
     // Fetch jobs sorted by 'id' in ascending order
     
